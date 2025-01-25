@@ -1,4 +1,7 @@
+use leptos::prelude::ElementChild;
+use leptos::view;
+
 fn main() {
     console_error_panic_hook::set_once();
-    println!("Hello, world!");
+    leptos::mount::mount_to_body(|| view! { <p>"Hello, world!"</p> })
 }
