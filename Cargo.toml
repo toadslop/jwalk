@@ -4,3 +4,5 @@ members = ["ui"]
 [workspace.dependencies]
 leptos = { version = "0.7.4", default-features = false, features = ["csr"] }
 console_error_panic_hook ={ version = "0.1.7", default-features = false }
+
+workspace.resolver = "2"
