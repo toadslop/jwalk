@@ -1,27 +1,34 @@
 use crate::model::Mountain;
 use leptos::{
     component,
-    prelude::{signal, ElementChild, Get},
-    server::Resource,
+    prelude::{ElementChild, Get},
+    server::OnceResource,
     view, IntoView,
 };
 
-async fn load_data(count: Vec<Mountain>) -> Vec<Mountain> {
-    count
+// TODO: make it possible to use multiple data sources, like static (loaded at compile time), database, and mock
+// will have async varieties
+#[allow(clippy::unused_async)]
+async fn load_data() -> Result<Vec<Mountain>, crate::Error> {
+    let csv = include_str!("../../data/mountains.csv");
+    let mut reader = csv::Reader::from_reader(csv.as_bytes());
+
+    let it: Vec<Mountain> = reader
+        .deserialize::<Mountain>()
+        .map(Result::unwrap)
+        .collect();
+
+    Ok(it)
 }
 
 #[component]
 pub fn App() -> impl IntoView {
-    let (count, _) = signal(vec![]);
-    let async_data = Resource::new(
-        move || count.get(),
-        // every time `count` changes, this will run
-        load_data,
-    );
+    let async_data = OnceResource::new(load_data());
 
     let async_result = move || {
         async_data
             .get()
+            .unwrap_or(Ok(Vec::with_capacity(0)))
             .unwrap_or_default()
             .first()
             .unwrap_or(&Mountain {

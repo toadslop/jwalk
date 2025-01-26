@@ -1,9 +1,11 @@
 #![warn(clippy::all, clippy::pedantic, clippy::cargo)]
 
 mod app;
+mod error;
 mod model;
 
 use app::App;
+pub use error::Error;
 use leptos::view;
 
 fn main() {
