@@ -1,10 +1,12 @@
 use crate::model::Mountain;
 use leptos::{
     component,
+    control_flow::For,
     prelude::{ElementChild, Get},
     server::OnceResource,
     view, IntoView,
 };
+use thaw::{Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow};
 
 // TODO: make it possible to use multiple data sources, like static (loaded at compile time), database, and mock
 // will have async varieties
@@ -13,12 +15,12 @@ async fn load_data() -> Result<Vec<Mountain>, crate::Error> {
     let csv = include_str!("../../data/mountains.csv");
     let mut reader = csv::Reader::from_reader(csv.as_bytes());
 
-    let it: Vec<Mountain> = reader
+    let data: Vec<Mountain> = reader
         .deserialize::<Mountain>()
         .map(Result::unwrap)
         .collect();
 
-    Ok(it)
+    Ok(data)
 }
 
 #[component]
@@ -30,14 +32,29 @@ pub fn App() -> impl IntoView {
             .get()
             .unwrap_or(Ok(Vec::with_capacity(0)))
             .unwrap_or_default()
-            .first()
-            .unwrap_or(&Mountain {
-                id: 0,
-                name: "hi".into(),
-            })
-            .name
-            .to_string()
     };
 
-    view! { <p>{move || async_result }</p> }
+    view! {
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHeaderCell>Name</TableHeaderCell>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                <For
+                    each=move || async_result()
+                    key=|mountain| mountain.id
+                    children=move|mountain| {
+                        view! {
+                            <TableRow>
+                                <TableCell>{mountain.name}</TableCell>
+                            </TableRow>
+                        }
+                    }
+                />
+            </TableBody>
+        </Table>
+
+    }
 }

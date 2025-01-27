@@ -6,7 +6,8 @@ description = "The ui components of jwalk"
 
 [dependencies]
 console_error_panic_hook = { workspace = true }
-csv = "1.3.1"
+csv = { workspace = true }
 leptos = { workspace = true }
 serde = { workspace = true }
+thaw = { workspace = true }
 thiserror = { workspace = true }
