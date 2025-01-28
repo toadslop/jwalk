@@ -1,12 +1,6 @@
 use crate::model::Mountain;
-use leptos::{
-    component,
-    control_flow::For,
-    prelude::{ElementChild, Get},
-    server::OnceResource,
-    view, IntoView,
-};
-use thaw::{Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow};
+use leptos::{component, control_flow::For, prelude::Get, server::OnceResource, view, IntoView};
+use thaw::{ConfigProvider, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow};
 
 // TODO: make it possible to use multiple data sources, like static (loaded at compile time), database, and mock
 // will have async varieties
@@ -35,26 +29,27 @@ pub fn App() -> impl IntoView {
     };
 
     view! {
-        <Table>
-            <TableHeader>
-                <TableRow>
-                    <TableHeaderCell>Name</TableHeaderCell>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                <For
-                    each=move || async_result()
-                    key=|mountain| mountain.id
-                    children=move|mountain| {
-                        view! {
-                            <TableRow>
-                                <TableCell>{mountain.name}</TableCell>
-                            </TableRow>
+        <ConfigProvider>
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHeaderCell>Name</TableHeaderCell>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    <For
+                        each=move || async_result()
+                        key=|mountain| mountain.id
+                        children=move|mountain| {
+                            view! {
+                                <TableRow>
+                                    <TableCell>{mountain.name}</TableCell>
+                                </TableRow>
+                            }
                         }
-                    }
-                />
-            </TableBody>
-        </Table>
-
+                    />
+                </TableBody>
+            </Table>
+        </ConfigProvider>
     }
 }
