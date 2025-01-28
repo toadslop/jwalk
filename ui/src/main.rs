@@ -3,6 +3,7 @@
 mod app;
 mod error;
 mod model;
+mod unit;
 
 use app::App;
 pub use error::Error;
