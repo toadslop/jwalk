@@ -1,6 +1,6 @@
 use crate::model::Mountain;
 use leptos::{component, control_flow::For, prelude::Get, server::OnceResource, view, IntoView};
-use thaw::{ConfigProvider, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow};
+use thaw::{ConfigProvider, Table, TableBody};
 
 // TODO: make it possible to use multiple data sources, like static (loaded at compile time), database, and mock
 // will have async varieties
@@ -35,24 +35,12 @@ pub fn App() -> impl IntoView {
     view! {
         <ConfigProvider>
             <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHeaderCell>Number</TableHeaderCell>
-                        <TableHeaderCell>Name</TableHeaderCell>
-                    </TableRow>
-                </TableHeader>
+                {Mountain::table_header()}
                 <TableBody>
                     <For
                         each=move || async_result()
                         key=|mountain| mountain.id
-                        children=move|mountain| {
-                            view! {
-                                <TableRow>
-                                    <TableCell>{mountain.id}</TableCell>
-                                    <TableCell>{mountain.name}</TableCell>
-                                </TableRow>
-                            }
-                        }
+                        children=Mountain::into_table_row
                     />
                 </TableBody>
             </Table>
