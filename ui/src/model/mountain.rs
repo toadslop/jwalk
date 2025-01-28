@@ -32,9 +32,9 @@ impl Mountain {
     pub fn table_header() -> impl IntoView {
         view! {
             <TableRow>
-                <TableHeaderCell>Number</TableHeaderCell>
-                <TableHeaderCell>Name</TableHeaderCell>
-                <TableHeaderCell>Altitude</TableHeaderCell>
+                <TableHeaderCell resizable=true>Number</TableHeaderCell>
+                <TableHeaderCell resizable=true>Name</TableHeaderCell>
+                <TableHeaderCell resizable=true>Altitude</TableHeaderCell>
             </TableRow>
         }
     }
