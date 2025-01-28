@@ -22,10 +22,14 @@ pub fn App() -> impl IntoView {
     let async_data = OnceResource::new(load_data());
 
     let async_result = move || {
-        async_data
+        let mut it = async_data
             .get()
             .unwrap_or(Ok(Vec::with_capacity(0)))
-            .unwrap_or_default()
+            .unwrap_or_default();
+
+        it.sort_by(|a, b| a.id.cmp(&b.id));
+
+        it
     };
 
     view! {
@@ -33,6 +37,7 @@ pub fn App() -> impl IntoView {
             <Table>
                 <TableHeader>
                     <TableRow>
+                        <TableHeaderCell>Number</TableHeaderCell>
                         <TableHeaderCell>Name</TableHeaderCell>
                     </TableRow>
                 </TableHeader>
@@ -43,6 +48,7 @@ pub fn App() -> impl IntoView {
                         children=move|mountain| {
                             view! {
                                 <TableRow>
+                                    <TableCell>{mountain.id}</TableCell>
                                     <TableCell>{mountain.name}</TableCell>
                                 </TableRow>
                             }
