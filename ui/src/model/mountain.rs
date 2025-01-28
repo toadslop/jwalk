@@ -1,4 +1,4 @@
-use leptos::{view, IntoView};
+use leptos::{prelude::AddAnyAttr, view, IntoView};
 use serde::{Deserialize, Serialize};
 use thaw::{TableCell, TableHeaderCell, TableRow};
 
@@ -32,7 +32,7 @@ impl Mountain {
     pub fn table_header() -> impl IntoView {
         view! {
             <TableRow>
-                <TableHeaderCell resizable=true>Number</TableHeaderCell>
+                <TableHeaderCell resizable=true min_width=48 style:width="48px">Number</TableHeaderCell>
                 <TableHeaderCell resizable=true>Name</TableHeaderCell>
                 <TableHeaderCell resizable=true>Altitude</TableHeaderCell>
             </TableRow>
