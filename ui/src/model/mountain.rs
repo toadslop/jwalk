@@ -1,5 +1,6 @@
 use leptos::{prelude::AddAnyAttr, view, IntoView};
 use serde::{Deserialize, Serialize};
+use sort_button::SortButton;
 use thaw::{TableCell, TableHeaderCell, TableRow};
 
 use crate::unit::Meter;
@@ -32,7 +33,10 @@ impl Mountain {
     pub fn table_header() -> impl IntoView {
         view! {
             <TableRow>
-                <TableHeaderCell resizable=true min_width=48 style:width="48px">Number</TableHeaderCell>
+                <TableHeaderCell resizable=true min_width=80 style:width="80px">
+                    Number
+                    <SortButton />
+                </TableHeaderCell>
                 <TableHeaderCell resizable=true>Name</TableHeaderCell>
                 <TableHeaderCell resizable=true>Altitude</TableHeaderCell>
             </TableRow>

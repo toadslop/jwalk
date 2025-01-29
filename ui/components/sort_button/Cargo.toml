@@ -1,0 +1,9 @@
+[package]
+name = "sort_button"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+leptos = { workspace = true }
+icondata = { workspace = true }
+thaw = { workspace = true }

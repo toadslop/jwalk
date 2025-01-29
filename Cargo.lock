@@ -605,10 +605,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "icondata"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "805a2a031c06a768407b774240192b0ad82ddb94554bb5b52053453f2f6b0bf1"
+dependencies = [
+ "icondata_bs",
+ "icondata_core",
+]
+
+[[package]]
 name = "icondata_ai"
 version = "0.0.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9bf3a9c196a6a169f790639ecc8fdd4396660b1d53b905230bf0b364776a56fc"
+dependencies = [
+ "icondata_core",
+]
+
+[[package]]
+name = "icondata_bs"
+version = "0.0.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "67940e592b0b8df8d7adc055c8542d135ce1d7d6ad01d8fb8de9405ebfc21c2e"
 dependencies = [
  "icondata_core",
 ]
@@ -1592,6 +1611,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3c5e1a9a646d36c3599cd173a41282daf47c44583ad367b8e6837255952e5c67"
 
 [[package]]
+name = "sort_button"
+version = "0.1.0"
+dependencies = [
+ "icondata",
+ "leptos",
+ "thaw",
+]
+
+[[package]]
 name = "stable_deref_trait"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1847,6 +1875,7 @@ dependencies = [
  "csv",
  "leptos",
  "serde",
+ "sort_button",
  "thaw",
  "thiserror 2.0.11",
 ]
