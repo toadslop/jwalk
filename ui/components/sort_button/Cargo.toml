@@ -7,3 +7,4 @@ edition = "2021"
 leptos = { workspace = true }
 icondata = { workspace = true }
 thaw = { workspace = true }
+thaw_utils = { workspace = true }

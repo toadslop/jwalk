@@ -12,7 +12,7 @@ categories = ["wasm"]
 [dependencies]
 console_error_panic_hook = { workspace = true }
 csv = { workspace = true }
-gloo-console = "0.3.0"
+gloo-console = { workspace = true }
 leptos = { workspace = true }
 serde = { workspace = true }
 sort_button = { path = "./components/sort_button" }

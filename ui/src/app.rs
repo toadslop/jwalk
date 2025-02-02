@@ -1,11 +1,19 @@
 use crate::model::Mountain;
-use leptos::{component, control_flow::For, prelude::Get, server::OnceResource, view, IntoView};
+use gloo_console::log;
+use leptos::{
+    component,
+    control_flow::For,
+    prelude::{signal, Effect, Get, Set},
+    server::OnceResource,
+    view, IntoView,
+};
 use thaw::{ConfigProvider, Table, TableBody};
 
 // TODO: make it possible to use multiple data sources, like static (loaded at compile time), database, and mock
 // will have async varieties
 #[allow(clippy::unused_async)]
 async fn load_data() -> Result<Vec<Mountain>, crate::Error> {
+    log!("load data called");
     let csv = include_str!("../../data/mountains.csv");
     let mut reader = csv::Reader::from_reader(csv.as_bytes());
 
@@ -19,26 +27,31 @@ async fn load_data() -> Result<Vec<Mountain>, crate::Error> {
 
 #[component]
 pub fn App() -> impl IntoView {
-    let async_data = OnceResource::new(load_data());
+    log!("rendered");
+    let (mountains, set_mountains) = signal(vec![]);
+    let mountains_resource = OnceResource::new(load_data());
 
-    let async_result = move || {
-        let mut it = async_data
-            .get()
-            .unwrap_or(Ok(Vec::with_capacity(0)))
-            .unwrap_or_default();
+    let watcher = Effect::watch(
+        move || mountains_resource.get(),
+        move |m, _, _| {
+            if let Some(m) = m {
+                set_mountains.set(m.to_owned().unwrap());
+            };
+        },
+        true,
+    );
 
-        it.sort_by(|a, b| a.id.cmp(&b.id));
-
-        it
-    };
+    if !mountains.get().is_empty() {
+        watcher.stop();
+    }
 
     view! {
         <ConfigProvider>
             <Table>
-                {Mountain::table_header()}
+                {Mountain::table_header(set_mountains)}
                 <TableBody>
                     <For
-                        each=move || async_result()
+                        each=move || mountains.get()
                         key=|mountain| mountain.id
                         children=Mountain::into_table_row
                     />
