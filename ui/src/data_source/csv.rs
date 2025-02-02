@@ -25,18 +25,14 @@ impl CsvDataSource {
 
 impl DataSource for CsvDataSource {
     async fn load_list(self, id: i32) -> Result<Vec<model::Mountain>, DataSourceError> {
-        log!("running load list");
         let mut reader = csv::Reader::from_reader(REGIONS.as_bytes());
-        log!("instantiated regions reader");
         let regions: HashMap<i32, Region> = reader
             .deserialize::<Region>()
             // TODO: partition
             .map(Result::unwrap)
             .map(|region| (region.id, region))
             .collect();
-        log!("parsed regions");
         let mountains_csv = id_to_data(id).ok_or(DataSourceError::NotFound).unwrap();
-        log!("found mountains csv");
         let mut reader = csv::Reader::from_reader(mountains_csv.as_bytes());
 
         let mountains: Vec<model::Mountain> = reader
@@ -55,7 +51,7 @@ impl DataSource for CsvDataSource {
                     .clone(),
             })
             .collect();
-        log!("parsed mountains");
+
         Ok(mountains)
     }
 }
