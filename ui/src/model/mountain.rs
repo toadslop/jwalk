@@ -47,8 +47,28 @@ impl Mountain {
                         });
                     } />
                 </TableHeaderCell>
-                <TableHeaderCell resizable=true>Name</TableHeaderCell>
-                <TableHeaderCell resizable=true>Altitude</TableHeaderCell>
+                <TableHeaderCell resizable=true>
+                    Name
+                    <SortButton on_click=move |(_, sort_order)| {
+                        data.update(|rows| {
+                            match sort_order {
+                                SortOrder::Ascending => rows.sort_by(|a, b| a.name.cmp(&b.name)),
+                                SortOrder::Descending => rows.sort_by(|a, b| b.name.cmp(&a.name)),
+                            }
+                        });
+                    } />
+                </TableHeaderCell>
+                <TableHeaderCell resizable=true>
+                    Altitude
+                    <SortButton on_click=move |(_, sort_order)| {
+                        data.update(|rows| {
+                            match sort_order {
+                                SortOrder::Ascending => rows.sort_by(|a, b| a.altitude.cmp(&b.altitude)),
+                                SortOrder::Descending => rows.sort_by(|a, b| b.altitude.cmp(&a.altitude)),
+                            }
+                        });
+                    } />
+                </TableHeaderCell>
             </TableRow>
         }
     }
