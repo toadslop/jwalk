@@ -1,5 +1,4 @@
-use crate::model::Mountain;
-use gloo_console::log;
+use crate::{data_source::DataSource, model::Mountain};
 use leptos::{
     component,
     control_flow::For,
@@ -9,29 +8,15 @@ use leptos::{
 };
 use thaw::{ConfigProvider, Table, TableBody};
 
-// TODO: make it possible to use multiple data sources, like static (loaded at compile time), database, and mock
-// will have async varieties
-#[allow(clippy::unused_async)]
-async fn load_data() -> Result<Vec<Mountain>, crate::Error> {
-    log!("load data called");
-    let csv = include_str!("../../data/mountains.csv");
-    let mut reader = csv::Reader::from_reader(csv.as_bytes());
-
-    let data: Vec<Mountain> = reader
-        .deserialize::<Mountain>()
-        .map(Result::unwrap)
-        .collect();
-
-    Ok(data)
-}
-
 #[component]
-pub fn App() -> impl IntoView {
-    log!("rendered");
+pub fn App(data_source: impl DataSource) -> impl IntoView {
     let (mountains, set_mountains) = signal(vec![]);
-    let mountains_resource = OnceResource::new(load_data());
 
-    let watcher = Effect::watch(
+    let mountains_resource: OnceResource<
+        Result<Vec<Mountain>, crate::data_source::DataSourceError>,
+    > = OnceResource::new(data_source.load_list(1));
+
+    Effect::watch(
         move || mountains_resource.get(),
         move |m, _, _| {
             if let Some(m) = m {
@@ -40,10 +25,6 @@ pub fn App() -> impl IntoView {
         },
         true,
     );
-
-    if !mountains.get().is_empty() {
-        watcher.stop();
-    }
 
     view! {
         <ConfigProvider>

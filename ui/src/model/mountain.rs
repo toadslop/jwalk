@@ -14,6 +14,7 @@ pub struct Mountain {
     pub id: i32,
     pub name: String,
     pub altitude: Meter,
+    pub region: String,
 }
 
 impl PartialEq for Mountain {
@@ -29,6 +30,7 @@ impl Mountain {
                 <TableCell>{self.id}</TableCell>
                 <TableCell>{self.name}</TableCell>
                 <TableCell>{self.altitude}</TableCell>
+                <TableCell>{self.region}</TableCell>
             </TableRow>
         }
     }
@@ -65,6 +67,17 @@ impl Mountain {
                             match sort_order {
                                 SortOrder::Ascending => rows.sort_by(|a, b| a.altitude.cmp(&b.altitude)),
                                 SortOrder::Descending => rows.sort_by(|a, b| b.altitude.cmp(&a.altitude)),
+                            }
+                        });
+                    } />
+                </TableHeaderCell>
+                <TableHeaderCell resizable=true>
+                    Region
+                    <SortButton on_click=move |(_, sort_order)| {
+                        data.update(|rows| {
+                            match sort_order {
+                                SortOrder::Ascending => rows.sort_by(|a, b| a.region.cmp(&b.region)),
+                                SortOrder::Descending => rows.sort_by(|a, b| b.region.cmp(&a.region)),
                             }
                         });
                     } />
