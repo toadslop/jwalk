@@ -1,4 +1,3 @@
-use crate::unit::Meter;
 use leptos::prelude::IntoAttribute;
 use leptos::{
     prelude::{AddAnyAttr, Update, WriteSignal},
@@ -8,13 +7,18 @@ use serde::{Deserialize, Serialize};
 use sort_button::{SortButton, SortOrder};
 use thaw::{TableCell, TableHeaderCell, TableRow};
 
-#[derive(Debug, Clone, Deserialize, Serialize, Default)]
+use super::difficulty_rating::DifficultyRating;
+use super::meter::Meter;
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Mountain {
     #[serde(alias = "number")]
     pub id: i32,
     pub name: String,
     pub altitude: Meter,
     pub region: String,
+    pub technical_difficulty: DifficultyRating,
+    pub physical_difficulty: DifficultyRating,
 }
 
 impl PartialEq for Mountain {

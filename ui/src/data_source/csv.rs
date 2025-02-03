@@ -1,5 +1,5 @@
 use super::{DataSource, DataSourceError};
-use crate::{model, unit::Meter};
+use crate::model::{self, difficulty_rating::DifficultyRating, meter::Meter};
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -48,6 +48,8 @@ impl DataSource for CsvDataSource {
                     .map(|a| a.name.clone())
                     .unwrap_or_default()
                     .clone(),
+                technical_difficulty: mountain.technical_difficulty,
+                physical_difficulty: mountain.physical_difficulty,
             })
             .collect();
 
@@ -62,6 +64,10 @@ pub struct Mountain {
     pub name: String,
     pub altitude: Meter,
     pub region_id: i32,
+    #[serde(alias = "terrain_diff")]
+    pub technical_difficulty: DifficultyRating,
+    #[serde(alias = "physical_diff")]
+    pub physical_difficulty: DifficultyRating,
 }
 
 #[derive(Debug, Clone, Deserialize)]

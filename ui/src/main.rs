@@ -4,7 +4,6 @@ mod app;
 mod data_source;
 mod error;
 mod model;
-mod unit;
 
 use app::App;
 use data_source::CsvDataSource;
