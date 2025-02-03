@@ -1,6 +1,5 @@
 use super::{DataSource, DataSourceError};
 use crate::{model, unit::Meter};
-use gloo_console::log;
 use serde::Deserialize;
 use std::collections::HashMap;
 
