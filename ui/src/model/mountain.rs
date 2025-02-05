@@ -5,7 +5,7 @@ use leptos::{
 };
 use serde::{Deserialize, Serialize};
 use sort_button::{SortButton, SortOrder};
-use thaw::{TableCell, TableHeaderCell, TableRow};
+use thaw::{Icon, TableCell, TableHeaderCell, TableRow};
 
 use super::difficulty_rating::DifficultyRating;
 use super::meter::Meter;
@@ -35,6 +35,8 @@ impl Mountain {
                 <TableCell>{self.name}</TableCell>
                 <TableCell>{self.altitude}</TableCell>
                 <TableCell>{self.region}</TableCell>
+                <TableCell>{self.physical_difficulty}</TableCell>
+                <TableCell>{self.technical_difficulty}</TableCell>
             </TableRow>
         }
     }
@@ -82,6 +84,28 @@ impl Mountain {
                             match sort_order {
                                 SortOrder::Ascending => rows.sort_by(|a, b| a.region.cmp(&b.region)),
                                 SortOrder::Descending => rows.sort_by(|a, b| b.region.cmp(&a.region)),
+                            }
+                        });
+                    } />
+                </TableHeaderCell>
+                <TableHeaderCell resizable=true>
+                    Physical Difficulty
+                    <SortButton on_click=move |(_, sort_order)| {
+                        data.update(|rows| {
+                            match sort_order {
+                                SortOrder::Ascending => rows.sort_by(|a, b| a.physical_difficulty.cmp(&b.physical_difficulty)),
+                                SortOrder::Descending => rows.sort_by(|a, b| b.physical_difficulty.cmp(&a.physical_difficulty)),
+                            }
+                        });
+                    } />
+                </TableHeaderCell>
+                <TableHeaderCell resizable=true>
+                    Technical Difficulty
+                    <SortButton on_click=move |(_, sort_order)| {
+                        data.update(|rows| {
+                            match sort_order {
+                                SortOrder::Ascending => rows.sort_by(|a, b| a.technical_difficulty.cmp(&b.technical_difficulty)),
+                                SortOrder::Descending => rows.sort_by(|a, b| b.technical_difficulty.cmp(&a.technical_difficulty)),
                             }
                         });
                     } />

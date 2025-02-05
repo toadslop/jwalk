@@ -1908,6 +1908,7 @@ dependencies = [
  "console_error_panic_hook",
  "csv",
  "gloo-console",
+ "icondata",
  "leptos",
  "serde",
  "sort_button",
