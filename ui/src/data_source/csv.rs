@@ -1,5 +1,8 @@
 use super::{DataSource, DataSourceError};
-use crate::model::{self, difficulty_rating::DifficultyRating, meter::Meter};
+use crate::{
+    error::handle_batch_error,
+    model::{self, difficulty_rating::DifficultyRating, meter::Meter},
+};
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -25,19 +28,19 @@ impl CsvDataSource {
 impl DataSource for CsvDataSource {
     async fn load_list(self, id: i32) -> Result<Vec<model::Mountain>, DataSourceError> {
         let mut reader = csv::Reader::from_reader(REGIONS.as_bytes());
-        let regions: HashMap<i32, Region> = reader
-            .deserialize::<Region>()
-            // TODO: partition
-            .map(Result::unwrap)
+
+        let deserialized = reader.deserialize::<Region>();
+
+        let regions: HashMap<i32, Region> = handle_batch_error(deserialized)
             .map(|region| (region.id, region))
             .collect();
-        let mountains_csv = id_to_data(id).ok_or(DataSourceError::NotFound).unwrap();
+
+        let mountains_csv = id_to_data(id).ok_or(DataSourceError::NotFound)?;
         let mut reader = csv::Reader::from_reader(mountains_csv.as_bytes());
 
-        let mountains: Vec<model::Mountain> = reader
-            .deserialize::<Mountain>()
-            // TODO: partition
-            .map(Result::unwrap)
+        let deserialized = reader.deserialize::<Mountain>();
+
+        let mountains = handle_batch_error(deserialized)
             .map(|mountain| model::Mountain {
                 id: mountain.id,
                 name: mountain.name,
