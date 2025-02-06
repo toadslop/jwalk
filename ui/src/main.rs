@@ -1,6 +1,7 @@
 #![warn(clippy::all, clippy::pedantic, clippy::cargo)]
 
 mod app;
+mod context;
 mod data_source;
 mod error;
 mod model;

@@ -1,26 +1,16 @@
-use crate::{data_source::DataSource, model::Mountain};
+use crate::{context::Context, data_source::DataSource, model::Mountain};
 use leptos::{
     component,
     control_flow::For,
-    prelude::{signal, Effect, Get, Set},
+    prelude::{provide_context, signal, Effect, Get, Set},
     server::OnceResource,
     view, IntoView,
 };
 use thaw::{ConfigProvider, Table, TableBody};
-use web_sys::{Navigator, Window};
-
-static DEFAULT_LOCALE: &str = "en-US";
-static SUPPORTED_LOCALES: [&str; 2] = ["en-US", "jp-JA"];
 
 #[component]
 pub fn App(data_source: impl DataSource) -> impl IntoView {
-    let locale = web_sys::window()
-        .as_ref()
-        .map(Window::navigator)
-        .as_ref()
-        .and_then(Navigator::language)
-        .filter(|a| SUPPORTED_LOCALES.contains(&a.as_str()))
-        .unwrap_or(DEFAULT_LOCALE.to_string());
+    provide_context(Context::init());
 
     let (mountains, set_mountains) = signal(vec![]);
 
