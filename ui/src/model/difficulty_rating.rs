@@ -1,5 +1,5 @@
 use leptos::{
-    prelude::{AnyView, IntoAny, IntoRender, Render, View},
+    prelude::{AnyView, IntoAny, IntoRender},
     view,
 };
 use serde::{Deserialize, Serialize};

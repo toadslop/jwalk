@@ -5,7 +5,7 @@ use leptos::{
 };
 use serde::{Deserialize, Serialize};
 use sort_button::{SortButton, SortOrder};
-use thaw::{Icon, TableCell, TableHeaderCell, TableRow};
+use thaw::{TableCell, TableHeaderCell, TableRow};
 
 use super::difficulty_rating::DifficultyRating;
 use super::meter::Meter;

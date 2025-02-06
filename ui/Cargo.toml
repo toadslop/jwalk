@@ -19,3 +19,4 @@ serde = { workspace = true }
 sort_button = { path = "./components/sort_button" }
 thaw = { workspace = true }
 thiserror = { workspace = true }
+web-sys = { workspace = true }
