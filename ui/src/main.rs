@@ -5,6 +5,7 @@ mod context;
 mod data_source;
 mod error;
 mod model;
+mod views;
 
 use app::App;
 use data_source::CsvDataSource;

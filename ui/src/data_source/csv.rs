@@ -16,8 +16,10 @@ fn id_to_data(id: i32) -> Option<&'static str> {
     }
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone, Copy)]
 pub struct CsvDataSource;
+
+unsafe impl Send for CsvDataSource {}
 
 impl CsvDataSource {
     pub fn new() -> Self {

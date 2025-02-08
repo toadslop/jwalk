@@ -4,7 +4,7 @@ pub mod csv;
 pub use csv::CsvDataSource;
 use serde::{Deserialize, Serialize};
 
-pub trait DataSource {
+pub trait DataSource: Send + Sync + Clone + Copy + 'static {
     fn load_list(
         self,
         list_id: i32,
