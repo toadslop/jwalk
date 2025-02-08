@@ -1,11 +1,15 @@
 use leptos::prelude::IntoAttribute;
+use leptos::Params;
 use leptos::{
     prelude::{AddAnyAttr, Update, WriteSignal},
     view, IntoView,
 };
+use leptos_router::params::Params;
 use serde::{Deserialize, Serialize};
 use sort_button::{SortButton, SortOrder};
 use thaw::{TableCell, TableHeaderCell, TableRow};
+
+use crate::context::SupportedLocale;
 
 use super::difficulty_rating::DifficultyRating;
 use super::meter::Meter;
@@ -113,4 +117,10 @@ impl Mountain {
             </TableRow>
         }
     }
+}
+
+#[derive(Params, PartialEq, Clone)]
+pub struct MountainParams {
+    pub list_name: Option<String>,
+    pub lang: Option<SupportedLocale>,
 }

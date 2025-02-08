@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 pub trait DataSource: Send + Sync + Clone + Copy + 'static {
     fn load_list(
         self,
-        list_id: i32,
+        list_id: String,
     ) -> impl std::future::Future<Output = Result<Vec<model::Mountain>, DataSourceError>>
            + std::marker::Send
            + 'static;

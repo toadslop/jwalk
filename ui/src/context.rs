@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use leptos::logging::warn;
+use leptos::{attr::Display, logging::warn};
 use web_sys::{Navigator, Window};
 
 #[derive(Debug, Clone, Default)]
@@ -39,7 +39,7 @@ impl Context {
     }
 }
 
-#[derive(Debug, Clone, Copy, Default)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub enum SupportedLocale {
     #[default]
     EnUs,
@@ -51,12 +51,23 @@ impl FromStr for SupportedLocale {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let locale = match s {
-            "en-US" => Self::EnUs,
-            "jp-JA" => Self::JpJa,
+            "en" | "en-US" => Self::EnUs,
+            "jp" | "jp-JA" => Self::JpJa,
             other => Err(ParseLocaleError::InvalidKey(other.to_string()))?,
         };
 
         Ok(locale)
+    }
+}
+
+impl std::fmt::Display for SupportedLocale {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let it = match self {
+            SupportedLocale::EnUs => "en-US",
+            SupportedLocale::JpJa => "jp-JA",
+        };
+
+        write!(f, "{it}")
     }
 }
 

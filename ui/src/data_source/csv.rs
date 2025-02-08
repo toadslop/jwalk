@@ -3,15 +3,17 @@ use crate::{
     error::handle_batch_error,
     model::{self, difficulty_rating::DifficultyRating, meter::Meter},
 };
+use gloo_console::debug;
 use serde::Deserialize;
 use std::collections::HashMap;
 
 static MOUNTAINS: &str = include_str!("../../../data/mountains.csv");
 static REGIONS: &str = include_str!("../../../data/regions.csv");
 
-fn id_to_data(id: i32) -> Option<&'static str> {
+fn id_to_data(id: &str) -> Option<&'static str> {
+    debug!(id);
     match id {
-        1 => Some(MOUNTAINS),
+        "100-famous" => Some(MOUNTAINS),
         _ => None,
     }
 }
@@ -28,7 +30,7 @@ impl CsvDataSource {
 }
 
 impl DataSource for CsvDataSource {
-    async fn load_list(self, id: i32) -> Result<Vec<model::Mountain>, DataSourceError> {
+    async fn load_list(self, id: String) -> Result<Vec<model::Mountain>, DataSourceError> {
         let mut reader = csv::Reader::from_reader(REGIONS.as_bytes());
 
         let deserialized = reader.deserialize::<Region>();
@@ -37,7 +39,7 @@ impl DataSource for CsvDataSource {
             .map(|region| (region.id, region))
             .collect();
 
-        let mountains_csv = id_to_data(id).ok_or(DataSourceError::NotFound)?;
+        let mountains_csv = id_to_data(&id).ok_or(DataSourceError::NotFound)?;
         let mut reader = csv::Reader::from_reader(mountains_csv.as_bytes());
 
         let deserialized = reader.deserialize::<Mountain>();
