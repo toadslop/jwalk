@@ -15,6 +15,7 @@ csv = { workspace = true }
 gloo-console = { workspace = true }
 icondata = { workspace = true }
 leptos = { workspace = true }
+leptos_router = { workspace = true }
 serde = { workspace = true }
 sort_button = { path = "./components/sort_button" }
 thaw = { workspace = true }
