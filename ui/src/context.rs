@@ -5,10 +5,10 @@ use web_sys::{Navigator, Window};
 
 #[derive(Debug, Clone, Default)]
 pub struct Context {
-    locale: SupportedLocale,
+    pub locale: SupportedLocale,
 }
 
-// TODO: need to make this monomorphic -- and invoking on the server side, should be possible to
+// TODO: need to make this isomorphic -- and invoking on the server side, should be possible to
 // pass in a locale which could be extracted from a path param
 impl Context {
     pub fn init() -> Self {
