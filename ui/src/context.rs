@@ -1,6 +1,5 @@
+use leptos::logging::warn;
 use std::str::FromStr;
-
-use leptos::{attr::Display, logging::warn};
 use web_sys::{Navigator, Window};
 
 #[derive(Debug, Clone, Default)]

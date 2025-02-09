@@ -4,23 +4,36 @@ use crate::{
 };
 use leptos::{
     component,
-    prelude::{signal, Effect, For, Get, Read, Set},
+    either::Either,
+    prelude::{signal, Effect, For, Get, GetUntracked, Set},
     server::OnceResource,
     view, IntoView,
 };
 use leptos_router::hooks::use_params;
 use thaw::{Table, TableBody};
 
+use super::not_found::NotFound;
+
 #[component]
 pub fn MountainTable(data_source: impl DataSource) -> impl IntoView {
     let (mountains, set_mountains) = signal(vec![]);
     let params = use_params::<MountainParams>();
 
-    let list_name = move || params.read().as_ref().unwrap().list_name.clone().unwrap();
+    #[allow(clippy::manual_let_else)]
+    let params = match params.get_untracked() {
+        Ok(params) => params,
+        Err(_) => return Either::Right(view! { <NotFound />}),
+    };
+
+    #[allow(clippy::manual_let_else)]
+    let list_name = match params.list_name {
+        Some(list_name) => list_name,
+        None => return Either::Right(view! { <NotFound />}),
+    };
 
     let mountains_resource: OnceResource<
         Result<Vec<Mountain>, crate::data_source::DataSourceError>,
-    > = OnceResource::new(data_source.load_list(list_name()));
+    > = OnceResource::new(data_source.load_list(list_name));
 
     Effect::watch(
         move || mountains_resource.get(),
@@ -32,7 +45,7 @@ pub fn MountainTable(data_source: impl DataSource) -> impl IntoView {
         true,
     );
 
-    view! {
+    Either::Left(view! {
         <Table>
             {Mountain::table_header(set_mountains)}
             <TableBody>
@@ -43,5 +56,5 @@ pub fn MountainTable(data_source: impl DataSource) -> impl IntoView {
                 />
             </TableBody>
         </Table>
-    }
+    })
 }
