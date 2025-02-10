@@ -19,16 +19,12 @@ pub fn MountainTable(data_source: impl DataSource) -> impl IntoView {
     let (mountains, set_mountains) = signal(vec![]);
     let params = use_params::<MountainParams>();
 
-    #[allow(clippy::manual_let_else)]
-    let params = match params.get_untracked() {
-        Ok(params) => params,
-        Err(_) => return Either::Right(view! { <NotFound />}),
+    let Ok(params) = params.get_untracked() else {
+        return Either::Right(view! { <NotFound />});
     };
 
-    #[allow(clippy::manual_let_else)]
-    let list_name = match params.list_name {
-        Some(list_name) => list_name,
-        None => return Either::Right(view! { <NotFound />}),
+    let Some(list_name) = params.list_name else {
+        return Either::Right(view! { <NotFound />});
     };
 
     let mountains_resource: OnceResource<
