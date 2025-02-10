@@ -9,9 +9,8 @@ use serde::{Deserialize, Serialize};
 use sort_button::{SortButton, SortOrder};
 use thaw::{TableCell, TableHeaderCell, TableRow};
 
-use crate::context::SupportedLocale;
-
 use super::difficulty_rating::DifficultyRating;
+use super::locale::SupportedLocale;
 use super::meter::Meter;
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
