@@ -24,5 +24,3 @@ pub fn App(data_source: impl DataSource) -> impl IntoView {
         </ConfigProvider>
     }
 }
-
-// TODO: make a proper 404 page

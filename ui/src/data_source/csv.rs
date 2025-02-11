@@ -1,5 +1,6 @@
 use super::{DataSource, DataSourceError};
 use crate::{
+    context::SupportedLocale,
     error::handle_batch_error,
     model::{self, difficulty_rating::DifficultyRating, meter::Meter},
 };
@@ -30,7 +31,11 @@ impl CsvDataSource {
 }
 
 impl DataSource for CsvDataSource {
-    async fn load_list(self, id: String) -> Result<Vec<model::Mountain>, DataSourceError> {
+    async fn load_list(
+        self,
+        id: String,
+        locale: SupportedLocale,
+    ) -> Result<Vec<model::Mountain>, DataSourceError> {
         let mut reader = csv::Reader::from_reader(REGIONS.as_bytes());
 
         let deserialized = reader.deserialize::<Region>();
