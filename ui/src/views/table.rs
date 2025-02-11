@@ -26,12 +26,15 @@ pub fn MountainTable(data_source: impl DataSource) -> impl IntoView {
         unreachable!();
     };
 
-    let Some(list_name) = params.list_name else {
+    let Some(lang) = params.lang else {
         navigate("/not-found", NavigateOptions::default());
         unreachable!();
     };
 
-    let Some(lang) = params.lang else {
+    // TODO: should have a single place to set the locale higher up the component tree
+    rust_i18n::set_locale(lang.as_ref());
+
+    let Some(list_name) = params.list_name else {
         navigate("/not-found", NavigateOptions::default());
         unreachable!();
     };

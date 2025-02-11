@@ -5,5 +5,6 @@ pub mod locale;
 pub mod meter;
 pub mod mountain;
 pub mod region;
+pub mod translation_key;
 
 pub use mountain::Mountain;

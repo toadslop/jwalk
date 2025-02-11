@@ -33,7 +33,7 @@ impl DataSource for CsvDataSource {
     async fn load_list(
         self,
         id: String,
-        locale: Locale,
+        _locale: Locale,
     ) -> Result<Vec<model::Mountain>, DataSourceError> {
         let mut reader = csv::Reader::from_reader(REGIONS.as_bytes());
 
