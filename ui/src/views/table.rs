@@ -4,32 +4,41 @@ use crate::{
 };
 use leptos::{
     component,
-    either::Either,
     prelude::{signal, Effect, For, Get, GetUntracked, Set},
     server::OnceResource,
     view, IntoView,
 };
-use leptos_router::hooks::use_params;
+use leptos_router::{
+    hooks::{use_navigate, use_params},
+    NavigateOptions,
+};
 use thaw::{Table, TableBody};
-
-use super::not_found::NotFound;
 
 #[component]
 pub fn MountainTable(data_source: impl DataSource) -> impl IntoView {
     let (mountains, set_mountains) = signal(vec![]);
     let params = use_params::<MountainParams>();
+    let navigate = use_navigate();
 
+    // TODO: use value of error to generate more helpful 404 message
     let Ok(params) = params.get_untracked() else {
-        return Either::Right(view! { <NotFound />});
+        navigate("/not-found", NavigateOptions::default());
+        unreachable!();
     };
 
     let Some(list_name) = params.list_name else {
-        return Either::Right(view! { <NotFound />});
+        navigate("/not-found", NavigateOptions::default());
+        unreachable!();
+    };
+
+    let Some(lang) = params.lang else {
+        navigate("/not-found", NavigateOptions::default());
+        unreachable!();
     };
 
     let mountains_resource: OnceResource<
         Result<Vec<Mountain>, crate::data_source::DataSourceError>,
-    > = OnceResource::new(data_source.load_list(list_name));
+    > = OnceResource::new(data_source.load_list(list_name, lang));
 
     Effect::watch(
         move || mountains_resource.get(),
@@ -41,7 +50,7 @@ pub fn MountainTable(data_source: impl DataSource) -> impl IntoView {
         true,
     );
 
-    Either::Left(view! {
+    view! {
         <Table>
             {Mountain::table_header(set_mountains)}
             <TableBody>
@@ -52,5 +61,5 @@ pub fn MountainTable(data_source: impl DataSource) -> impl IntoView {
                 />
             </TableBody>
         </Table>
-    })
+    }
 }

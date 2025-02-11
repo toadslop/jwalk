@@ -14,14 +14,13 @@ pub fn App(data_source: impl DataSource) -> impl IntoView {
     view! {
         <ConfigProvider>
             <Router>
-                <Routes fallback=|| view! {<NotFound />}>
+                <Routes fallback=NotFound>
                     <ParentRoute path=path!("/:lang") view=Outlet>
                         <Route path=path!("/lists/:list_name/table") view=move || view! { <MountainTable data_source /> }/>
                     </ParentRoute>
+                    <Route path=path!("/not-found") view=NotFound />
                 </Routes>
             </Router>
         </ConfigProvider>
     }
 }
-
-// TODO: make a proper 404 page

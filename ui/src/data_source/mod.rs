@@ -1,4 +1,4 @@
-use crate::model;
+use crate::{context::SupportedLocale, model};
 pub mod csv;
 pub use csv::CsvDataSource;
 use serde::{Deserialize, Serialize};
@@ -7,6 +7,7 @@ pub trait DataSource: Send + Sync + Clone + Copy + 'static {
     fn load_list(
         self,
         list_id: String,
+        locale: SupportedLocale,
     ) -> impl std::future::Future<Output = Result<Vec<model::Mountain>, DataSourceError>>
            + std::marker::Send
            + 'static;
