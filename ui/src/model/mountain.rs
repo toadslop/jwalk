@@ -10,7 +10,7 @@ use sort_button::{SortButton, SortOrder};
 use thaw::{TableCell, TableHeaderCell, TableRow};
 
 use super::difficulty_rating::DifficultyRating;
-use super::locale::SupportedLocale;
+use super::locale::Locale;
 use super::meter::Meter;
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -121,5 +121,5 @@ impl Mountain {
 #[derive(Params, PartialEq, Clone)]
 pub struct MountainParams {
     pub list_name: Option<String>,
-    pub lang: Option<SupportedLocale>,
+    pub lang: Option<Locale>,
 }

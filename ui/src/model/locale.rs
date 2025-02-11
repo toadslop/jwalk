@@ -1,13 +1,13 @@
 use std::str::FromStr;
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
-pub enum SupportedLocale {
+pub enum Locale {
     #[default]
     EnUs,
     JpJa,
 }
 
-impl FromStr for SupportedLocale {
+impl FromStr for Locale {
     type Err = ParseLocaleError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
@@ -21,11 +21,11 @@ impl FromStr for SupportedLocale {
     }
 }
 
-impl std::fmt::Display for SupportedLocale {
+impl std::fmt::Display for Locale {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let it = match self {
-            SupportedLocale::EnUs => "en-US",
-            SupportedLocale::JpJa => "jp-JA",
+            Self::EnUs => "en-US",
+            Self::JpJa => "jp-JA",
         };
 
         write!(f, "{it}")

@@ -1,8 +1,7 @@
 use super::{DataSource, DataSourceError};
 use crate::{
-    context::SupportedLocale,
     error::handle_batch_error,
-    model::{self, difficulty_rating::DifficultyRating, meter::Meter},
+    model::{self, difficulty_rating::DifficultyRating, locale::Locale, meter::Meter},
 };
 use gloo_console::debug;
 use serde::Deserialize;
@@ -34,7 +33,7 @@ impl DataSource for CsvDataSource {
     async fn load_list(
         self,
         id: String,
-        locale: SupportedLocale,
+        locale: Locale,
     ) -> Result<Vec<model::Mountain>, DataSourceError> {
         let mut reader = csv::Reader::from_reader(REGIONS.as_bytes());
 

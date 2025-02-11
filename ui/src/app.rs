@@ -14,11 +14,11 @@ pub fn App(data_source: impl DataSource) -> impl IntoView {
     view! {
         <ConfigProvider>
             <Router>
-                <Routes fallback=NotFound>
+                <Routes fallback=|| view! {<NotFound />} >
                     <ParentRoute path=path!("/:lang") view=Outlet>
                         <Route path=path!("/lists/:list_name/table") view=move || view! { <MountainTable data_source /> }/>
                     </ParentRoute>
-                    <Route path=path!("/not-found") view=NotFound />
+                    <Route path=path!("/not-found") view=|| view! {<NotFound />} />
                 </Routes>
             </Router>
         </ConfigProvider>
