@@ -8,6 +8,7 @@ mod app;
 mod data_source;
 mod error;
 mod model;
+mod util;
 mod views;
 
 use app::App;
