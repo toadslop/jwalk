@@ -7,6 +7,7 @@ use crate::{
     },
 };
 use gloo_console::debug;
+use leptos::logging::error;
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -54,18 +55,25 @@ impl DataSource for CsvDataSource {
         let mountains = handle_batch_error(deserialized)
             .map(|mountain| (regions.get(&mountain.region_id), mountain))
             .map(|(region, mountain)| {
-                if let Some(region) = region {
-                    Ok(model::Mountain {
-                        id: mountain.id,
-                        name: mountain.name,
-                        altitude: mountain.altitude,
-                        region: region.name.as_locale(locale).to_string(),
-                        technical_difficulty: mountain.technical_difficulty,
-                        physical_difficulty: mountain.physical_difficulty,
-                    })
-                } else {
-                    Err(DataSourceError::NotFound)
+                if region.is_none() {
+                    error!(
+                        "Invalid data: region not found with id {}",
+                        mountain.region_id
+                    );
                 }
+                debug_assert!(region.is_some());
+
+                let region_name =
+                    region.map_or(TranslationKey::not_found(), |region| region.name.clone());
+
+                Ok(model::Mountain {
+                    id: mountain.id,
+                    name: mountain.name,
+                    altitude: mountain.altitude,
+                    region: region_name.as_locale(locale).to_string(),
+                    technical_difficulty: mountain.technical_difficulty,
+                    physical_difficulty: mountain.physical_difficulty,
+                })
             })
             .collect::<Result<Vec<_>, _>>()?;
 

@@ -17,4 +17,6 @@ pub trait DataSource: Send + Sync + Clone + Copy + 'static {
 pub enum DataSourceError {
     #[error("Requested data was not found.")]
     NotFound,
+    #[error("An error occurred while loading data.")]
+    InvalidData,
 }

@@ -9,6 +9,16 @@ use std::{
 #[derive(Debug, Clone, Deserialize)]
 pub struct TranslationKey(String);
 
+impl TranslationKey {
+    pub fn new(key: impl Into<String>) -> Self {
+        Self(key.into())
+    }
+
+    pub fn not_found() -> Self {
+        Self::new("not-found")
+    }
+}
+
 impl AsRef<str> for TranslationKey {
     fn as_ref(&self) -> &str {
         &self.0
