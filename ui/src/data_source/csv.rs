@@ -1,7 +1,10 @@
 use super::{DataSource, DataSourceError};
 use crate::{
     error::handle_batch_error,
-    model::{self, difficulty_rating::DifficultyRating, locale::Locale, meter::Meter},
+    model::{
+        self, difficulty_rating::DifficultyRating, locale::Locale, meter::Meter,
+        translation_key::TranslationKey,
+    },
 };
 use gloo_console::debug;
 use serde::Deserialize;
@@ -33,7 +36,7 @@ impl DataSource for CsvDataSource {
     async fn load_list(
         self,
         id: String,
-        _locale: Locale,
+        locale: Locale,
     ) -> Result<Vec<model::Mountain>, DataSourceError> {
         let mut reader = csv::Reader::from_reader(REGIONS.as_bytes());
 
@@ -49,20 +52,22 @@ impl DataSource for CsvDataSource {
         let deserialized = reader.deserialize::<Mountain>();
 
         let mountains = handle_batch_error(deserialized)
-            .map(|mountain| model::Mountain {
-                id: mountain.id,
-                name: mountain.name,
-                altitude: mountain.altitude,
-                region: regions
-                    .get(&mountain.region_id)
-                    // TODO: handle error properly
-                    .map(|a| a.name.clone())
-                    .unwrap_or_default()
-                    .clone(),
-                technical_difficulty: mountain.technical_difficulty,
-                physical_difficulty: mountain.physical_difficulty,
+            .map(|mountain| (regions.get(&mountain.region_id), mountain))
+            .map(|(region, mountain)| {
+                if let Some(region) = region {
+                    Ok(model::Mountain {
+                        id: mountain.id,
+                        name: mountain.name,
+                        altitude: mountain.altitude,
+                        region: region.name.as_locale(locale).to_string(),
+                        technical_difficulty: mountain.technical_difficulty,
+                        physical_difficulty: mountain.physical_difficulty,
+                    })
+                } else {
+                    Err(DataSourceError::NotFound)
+                }
             })
-            .collect();
+            .collect::<Result<Vec<_>, _>>()?;
 
         Ok(mountains)
     }
@@ -85,5 +90,5 @@ pub struct Mountain {
 pub struct Region {
     #[serde(alias = "number")]
     pub id: i32,
-    pub name: String,
+    pub name: TranslationKey,
 }

@@ -1,6 +1,25 @@
-use std::fmt::{self, Display, Formatter};
+use super::locale::Locale;
+use rust_i18n::t;
+use serde::Deserialize;
+use std::{
+    borrow::Cow,
+    fmt::{self, Display, Formatter},
+};
 
+#[derive(Debug, Clone, Deserialize)]
 pub struct TranslationKey(String);
+
+impl AsRef<str> for TranslationKey {
+    fn as_ref(&self) -> &str {
+        &self.0
+    }
+}
+
+impl TranslationKey {
+    pub fn as_locale(&self, locale: Locale) -> Cow<'_, str> {
+        t!(self.as_ref(), locale = locale.as_ref())
+    }
+}
 
 impl Display for TranslationKey {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
